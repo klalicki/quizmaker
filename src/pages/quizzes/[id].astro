@@ -1,0 +1,137 @@
+---
+import type { GetStaticPaths } from "astro"
+import markdownit from 'markdown-it';
+const { id = "" } = Astro.params;
+import { getEntry, getCollection } from "astro:content";
+
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+const processMd = markdownit()
+
+const randomizeArray = (array: any[]) => {
+  
+  let arr = [...array]
+
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+};
+
+const quiz = await getEntry("quizCollection", id);
+if (!quiz) {
+  throw new Error(`No quiz found for id: ${id}`);
+}
+
+export const getStaticPaths = async () => {
+  const quizCollection = await getCollection("quizCollection");
+  return quizCollection.map((quiz) => ({
+    params: { id: quiz.id },
+  }));
+};
+
+const { questions, variations, title } = quiz.data;
+
+
+const testVersions = new Array(quiz.data.variations);
+
+for (let i = 0; i < testVersions.length; i++) {
+  const questions = quiz.data.questions.map((question) => {
+    const options = randomizeArray([...question.options, question.answer]);
+    const correctIndex = options.indexOf(question.answer);
+    return {
+      title: question.question,
+      options,
+      correctIndex,
+    };
+  });
+  testVersions[i] = { questions:randomizeArray(questions) };
+}
+---
+
+{
+  testVersions.map((test, testIndex) => {
+    return (
+      <article>
+        <h1>
+          {title} - Version {testIndex + 1}
+        </h1>
+
+        {test.questions.map((question, questionIndex) => (
+          <section class="question">
+            <p class="question-number">Question {questionIndex + 1}</p>
+            <div class="question-title" set:html={processMd.render(question.title)}/>
+            <ol>
+              {question.options.map((option, optionIndex) => (
+                <li set:html={processMd.renderInline(option)}/>
+              ))}
+            </ol>
+
+            
+          </section>
+        ))}
+      </article>
+    );
+  })
+}
+<article class="answer-key">
+  <h1>{title} - Answer Key</h1>
+
+  {
+    testVersions.map((test, testIndex) => (
+      <section>
+        <h2>Version {testIndex + 1} Answers</h2>
+        <ol>
+          {test.questions.map((question, questionIndex) => (
+            <li>{letters[question.correctIndex]}</li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</article>
+
+<style>
+  :root{
+    font-size:20px;
+    font-family:sans-serif;
+  }
+  ol {
+    list-style: upper-alpha;
+  }
+  .answer-key ol {
+    list-style: decimal;
+  }
+h1{
+  font-size:2rem;
+}
+  h2{
+    font-size:1.25rem;
+  }
+
+.question{
+  border:1px solid black;
+  padding:1rem;
+  margin-top:.5rem;
+  margin-bottom:.5rem;
+
+}
+.question>*:first-child{
+  margin-top:0;
+}
+.question>*:last-child{
+  margin-bottom:0;
+}
+
+@media print{
+
+article {
+  page-break-after: always;
+
+}
+
+</style>
+
