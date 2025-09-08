@@ -1,43 +1,58 @@
-# Astro Starter Kit: Minimal
+# Astro-based Quiz Maker
 
-```sh
-npm create astro@latest -- --template minimal
+For generating randomized individual quizzes from a question bank.
+
+## how to use
+
+1. install it
+   ```bash
+   npm install
+   ```
+2. add your quiz in `src/quizzes/your_quiz_name.yml`
+3. run the dev server
+   ```bash
+   npm run dev
+   ```
+4. open your quiz and print it!
+
+## quiz format:
+
+```yaml
+title: Your Quiz Title
+variations: 5 # number of variations to generate
+questions:
+  - question: What does CSS stand for?
+    answer: Cascading Style Sheets # correct answer
+    options: # other options
+      - Computer Stinky Stuff
+      - Crazy Solid Snake
+      - Cute Soft Sushi
+  - question: What does HTML stand for?
+    answer: HyperText Markup Language
+    # etc...
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+To put code blocks in a question or answer, you can use YAML literal block style:
+(a pipe character `|` followed by a newline and an indented block of text)
 
-## 🚀 Project Structure
+````yaml
+- question: |
+    Which of the following is valid HTML for the heading tag with the smallest size and lowest rank in the hierarchy?
+    ```html
+    <h6>This is a heading</h6>
+    ```
+````
 
-Inside of your Astro project, you'll see the following folders and files:
+You can also use double quotes for single-line markdown strings with inline code:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```yaml
+- question: "What does `<div>` mean?"
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Most other (single-line)markdown syntax should work fine without needing quotes or block style.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```yaml
+- question: Here's a question with some *italic* and **bold** text
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Because it's YAML, be careful with `:` and `-` in text. If you need to use them, wrap the text in quotes.
