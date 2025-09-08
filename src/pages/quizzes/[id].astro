@@ -56,9 +56,11 @@ for (let i = 0; i < testVersions.length; i++) {
   testVersions.map((test, testIndex) => {
     return (
       <article>
-        <h1>
-          {title} - Version {testIndex + 1}
-        </h1>
+        <div class="quiz-headline">
+           <h1>{title}</h1> 
+           <p>id:{testIndex + 1}</p>
+        </div>
+       
 
         {test.questions.map((question, questionIndex) => (
           <section class="question">
@@ -105,6 +107,12 @@ for (let i = 0; i < testVersions.length; i++) {
   .answer-key ol {
     list-style: decimal;
   }
+  .quiz-headline{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+  }
 h1{
   font-size:2rem;
 }
@@ -135,3 +143,9 @@ article {
 
 </style>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script is:inline  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+
+<script>hljs.highlightAll();</script>

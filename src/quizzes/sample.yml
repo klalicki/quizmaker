@@ -8,18 +8,26 @@ questions:
       - Creative Spicy Sauce
       - Colorful Seventy Seven
   - question: Which HTML tag is used to define an internal style sheet?
-    answer: <style>
+    answer: |
+      `<style>`
     options:
-      - <css>
-      - <script>
-      - <stylesheet>
+      - |
+        `<css>`
+      - |
+        `<script>`
+      - |
+        `<stylesheet>`
   - question: |
       Which property is used to change the background color in CSS?
-      ```
+      ```css
       background-color: blue;
       ```
-    answer: background-color
+    answer: |
+      `background-color`
     options:
-      - color
-      - bgcolor
-      - background
+      - |
+        `color`
+      - |
+        `bgcolor`
+      - |
+        `background`
